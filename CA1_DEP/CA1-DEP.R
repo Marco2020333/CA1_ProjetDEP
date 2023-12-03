@@ -43,4 +43,10 @@ data_Process <-predict(preprocess_num,covid_2022[, c(2, 3,4,5,6,10)])
 #
 summary(data_Process)
 
+#G- question
+columns_num <-covid_2022[, c(2, 3, 4, 5, 6, 10)]
+data_clean<- na.omit(columns_num)
 
+covid_2022.pca <- prcomp(data_clean, center = TRUE, scale. = TRUE)
+
+summary(covid_2022.pca)
