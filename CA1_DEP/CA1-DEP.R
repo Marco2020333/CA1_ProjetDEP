@@ -24,6 +24,8 @@ skim_report <- skim(covid_2022)
 print(skim_report)
 # Load the dplyr library
 
+
+
 #Question B
 # Glimpse at the dataset
 glimpse(covid_2022)
@@ -51,8 +53,9 @@ ggplot(covid_2022, aes(x = cases, y = deaths)) +
 library(ggplot2)
 ggplot(covid_2022, aes(x = factor(month), y = factor(year), fill = cases)) +
   geom_tile() +
-  scale_fill_gradient(low = "white", high = "blue") +
+  scale_fill_gradient(low = "white", high = "pink") +
   labs(x = "Month", y = "Year", title = "Heatmap of Cases by Month and Year")
+
 
 # Line Plot
 library(ggplot2)
