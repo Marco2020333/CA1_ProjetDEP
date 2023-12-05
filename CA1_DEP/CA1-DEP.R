@@ -24,13 +24,74 @@ skim_report <- skim(covid_2022)
 print(skim_report)
 # Load the dplyr library
 
+# Categorical Variables
+ggplot(covid_2022, aes(x = countriesAndTerritories)) +
+  geom_bar() +
+  labs(title = "Distribution of Countries and Territories") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))  # Rotate labels at a 45-degree angle
 
+ggplot(covid_2022, aes(x = geoId)) +
+  geom_bar() +
+  labs(title = "Distribution of Geographic IDs")
+   
+
+ggplot(covid_2022, aes(y = countryterritoryCode)) +
+  geom_bar() +
+  labs(title = "Distribution of Country/Territory Codes")
+
+ggplot(covid_2022, aes(x = continentExp)) +
+  geom_bar(stat = "count", width = 0.7) +
+  labs(title = "Distribution of Continents") +
+  theme_minimal()
+# Discrete Variables
+ggplot(covid_2022, aes(x = day, fill = "red")) +  # Fill setting the color
+  geom_bar() +
+  labs(title = "Distribution of Days")
+
+ggplot(covid_2022, aes(x = month, fill = "red")) +
+  geom_bar() +
+  labs(title = "Distribution of Months")
+
+ggplot(covid_2022, aes(x = year, fill = "red")) +
+  geom_bar() +
+  labs(title = "Distribution of Years")
+
+ggplot(covid_2022, aes(x = cases)) +
+  geom_bar(binwidth = 1000, fill = "purple", color = "red") +
+  labs(title = "Distribution of Cases")
+
+
+ggplot(covid_2022, aes(x = deaths)) +
+  geom_bar(binwidth = 1000, fill = "purple", color = "red") +
+  labs(title = "Distribution of Deaths")
+
+
+#Continuous Variables
+ggplot(covid_2022, aes(x = popData2020)) +
+  geom_density() +
+  labs(title = "Density Plot of Population Data") +
+  scale_x_continuous(labels = scales::comma) 
+
+# Convert dateRep to Date type
+covid_2022$dateRep <- as.Date(covid_2022$dateRep, format = "%d/%m/%Y")
+
+# Create a variable 'count' with a constant value of 1 for each date
+covid_2022$Count <- 1
+
+# Plot the bar chart
+ggplot(covid_2022, aes(x = dateRep)) +
+  geom_bar(stat = "count") +
+  labs(title = "Bar Chart of DateRep")
 
 #Question B
 # Glimpse at the dataset
 glimpse(covid_2022)
 
 #
+convert_date$dateRep <- as.Date(covid_2022$dateRep, format = "%d/%m/%Y")
+ ggplot(convert_date, aes(x = dateRep)) +
+   geom_line() +
+   labs(title = "Time Series Plot of DateRep")
 summary(covid_2022)
 
 #Question C
