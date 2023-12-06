@@ -43,6 +43,19 @@ ggplot(covid_2022, aes(x = continentExp)) +
   geom_bar(stat = "count", width = 0.7) +
   labs(title = "Distribution of Continents") +
   theme_minimal()
+
+# Convert dateRep to Date type
+covid_2022$dateRep <- as.Date(covid_2022$dateRep, format = "%d/%m/%Y")
+
+# Create a variable 'count' with a constant value of 1 for each date
+covid_2022$Count <- 1
+
+# Plot the bar chart
+ggplot(covid_2022, aes(x = dateRep)) +
+  geom_bar(stat = "count") +
+  labs(title = "DateRep")
+
+
 # Discrete Variables
 ggplot(covid_2022, aes(x = day, fill = "red")) +  # Fill setting the color
   geom_bar() +
@@ -59,17 +72,19 @@ ggplot(covid_2022, aes(x = year, fill = "red")) +
 ggplot(covid_2022, aes(x = cases)) +
   geom_bar(binwidth = 1000, fill = "purple", color = "red") +
   labs(title = "Distribution of Cases")
+  
 
 
 ggplot(covid_2022, aes(x = deaths)) +
   geom_bar(binwidth = 1000, fill = "purple", color = "red") +
   labs(title = "Distribution of Deaths")
+  
 
 
 #Continuous Variables
 ggplot(covid_2022, aes(x = popData2020)) +
   geom_density() +
-  labs(title = "Density Plot of Population Data") +
+  labs(title = "Density of Population Data") +
   scale_x_continuous(labels = scales::comma) 
 
 # Convert dateRep to Date type
@@ -81,18 +96,14 @@ covid_2022$Count <- 1
 # Plot the bar chart
 ggplot(covid_2022, aes(x = dateRep)) +
   geom_bar(stat = "count") +
-  labs(title = "Bar Chart of DateRep")
+  labs(title = "DateRep")
 
 #Question B
 # Glimpse at the dataset
 glimpse(covid_2022)
 
-#
-convert_date$dateRep <- as.Date(covid_2022$dateRep, format = "%d/%m/%Y")
- ggplot(convert_date, aes(x = dateRep)) +
-   geom_line() +
-   labs(title = "Time Series Plot of DateRep")
 summary(covid_2022)
+
 
 #Question C
 preprocess_num <-preProcess(covid_2022[, c(2, 3,4,5,6,10)], method=c('center','scale'))
@@ -107,15 +118,17 @@ summary(data_Process)
 # Scatter plot
 ggplot(covid_2022, aes(x = cases, y = deaths)) +
   geom_point() +
-  labs(x = "Cases", y = "Deaths", title = "Scatter Plot of Cases vs Deaths")
-
+  labs(x = "Cases", y = "Deaths", title = "Cases vs Deaths") +
+  scale_x_continuous(labels = scales::number_format(scale = 1e-3)) +
+  scale_y_continuous(labels = scales::number_format(scale = 1e-3))
 
 # Heatmaps
-library(ggplot2)
+
 ggplot(covid_2022, aes(x = factor(month), y = factor(year), fill = cases)) +
   geom_tile() +
-  scale_fill_gradient(low = "white", high = "pink") +
-  labs(x = "Month", y = "Year", title = "Heatmap of Cases by Month and Year")
+  scale_fill_gradient(low = "white", high = "pink", labels = scales::comma_format()) +
+  labs(x = "Month", y = "Year", title = "Cases by Month and Year")
+I
 
 
 # Line Plot
@@ -125,7 +138,8 @@ ggplot(covid_2022, aes(x = as.Date(dateRep), y = cases, group = countryterritory
   geom_line() +
   labs(title = "Cases Over Time",
        x = "Date",
-       y = "Cases")
+       y = "Cases")+
+scale_y_continuous(labels = scales::comma_format())
 
 #G- question
 columns_num <-covid_2022[, c(2, 3, 4, 5, 6, 10)]
@@ -135,11 +149,11 @@ covid_2022.pca <- prcomp(data_clean, center = TRUE, scale. = TRUE)
 
 summary(covid_2022.pca) 
 
-#F from :tutorial 5 by lecture Muhmmad
+#F from :tutorial 5 by lecturer Muhmmad
 head(covid_2022)
 
 covid_2022$Year_2020<- ifelse(covid_2022$year == '2020', 1, 0)
 covid_2022$Year_2021 <- ifelse(covid_2022$year == '2021', 1, 0)
 covid_2022$Year_2022 <- ifelse(covid_2022$year == '2022', 1, 0)
 print(covid_2022)
-view(covid_2022)
+View(covid_2022)
