@@ -1,30 +1,28 @@
-# Load necessary libraries
 
-install.packages(c("tidyverse","dummy","caTools","conflicted"))
+# Most of code was provided from Tutorial 5 by  lecturer  Dr Muhmmad Lqbal
+# Load necessary libraries
+install.packages(c("tidyverse", "conflicted"))
 install.packages("skimr")
 install.packages("caret")
 
-
 library(conflicted)
 library(tidyverse)
-library(dummy)
-library(caTools)
 library(skimr)
 library(dplyr)
 library(caret)
 library(ggplot2)
-
+# read the dataset
 covid_2022 <-read_csv(file="covid_2022.csv")
 view(covid_2022)
 
-#A
+# variable create to get skim method
 skim_report <- skim(covid_2022)
 
 # Print the summary
 print(skim_report)
 # Load the dplyr library
 
-# Categorical Variables
+# bar plot the Categorical Variables
 ggplot(covid_2022, aes(x = countriesAndTerritories)) +
   geom_bar() +
   labs(title = "Distribution of Countries and Territories") +
@@ -45,18 +43,18 @@ ggplot(covid_2022, aes(x = continentExp)) +
   theme_minimal()
 
 # Convert dateRep to Date type
-covid_2022$dateRep <- as.Date(covid_2022$dateRep, format = "%d/%m/%Y")
+covid_2022$dateRep <- as.Date(covid_2022$dateRep, format = "%d/%m/%Y")#https://community.rstudio.com/t/convert-character-string-to-date/130524
 
 # Create a variable 'count' with a constant value of 1 for each date
 covid_2022$Count <- 1
 
-# Plot the bar chart
+# 
 ggplot(covid_2022, aes(x = dateRep)) +
   geom_bar(stat = "count") +
   labs(title = "DateRep")
 
 
-# Discrete Variables
+#  bar plot to Discrete Variables
 ggplot(covid_2022, aes(x = day, fill = "red")) +  # Fill setting the color
   geom_bar() +
   labs(title = "Distribution of Days")
@@ -81,22 +79,11 @@ ggplot(covid_2022, aes(x = deaths)) +
   
 
 
-#Continuous Variables
+# scatter Plot the Continuous Variables
 ggplot(covid_2022, aes(x = popData2020)) +
   geom_density() +
   labs(title = "Density of Population Data") +
   scale_x_continuous(labels = scales::comma) 
-
-# Convert dateRep to Date type
-covid_2022$dateRep <- as.Date(covid_2022$dateRep, format = "%d/%m/%Y")
-
-# Create a variable 'count' with a constant value of 1 for each date
-covid_2022$Count <- 1
-
-# Plot the bar chart
-ggplot(covid_2022, aes(x = dateRep)) +
-  geom_bar(stat = "count") +
-  labs(title = "DateRep")
 
 #Question B
 # Glimpse at the dataset
@@ -105,7 +92,7 @@ glimpse(covid_2022)
 summary(covid_2022)
 
 
-#Question C
+#Question C Min-Max Normalization, Z-score Standardization and Robust scalar
 preprocess_num <-preProcess(covid_2022[, c(2, 3,4,5,6,10)], method=c('center','scale'))
 
 #
@@ -119,17 +106,15 @@ summary(data_Process)
 ggplot(covid_2022, aes(x = cases, y = deaths)) +
   geom_point() +
   labs(x = "Cases", y = "Deaths", title = "Cases vs Deaths") +
-  scale_x_continuous(labels = scales::number_format(scale = 1e-3)) +
-  scale_y_continuous(labels = scales::number_format(scale = 1e-3))
+  scale_x_continuous(labels = scales::number_format(scale = 1e-3)) + # this line from :https://thiyanga.netlify.app/post/plotaxis/
+  scale_y_continuous(labels = scales::number_format(scale = 1e-3))   # this line from :https://thiyanga.netlify.app/post/plotaxis/
 
 # Heatmaps
 
 ggplot(covid_2022, aes(x = factor(month), y = factor(year), fill = cases)) +
   geom_tile() +
-  scale_fill_gradient(low = "white", high = "pink", labels = scales::comma_format()) +
+  scale_fill_gradient(low = "white", high = "pink", labels = scales::comma_format()) + #https://rstudio-pubs-static.s3.amazonaws.com/224435_1a0eb58a057a4c69b1fe1eb21553ecef.html
   labs(x = "Month", y = "Year", title = "Cases by Month and Year")
-I
-
 
 # Line Plot
 library(ggplot2)
@@ -139,9 +124,18 @@ ggplot(covid_2022, aes(x = as.Date(dateRep), y = cases, group = countryterritory
   labs(title = "Cases Over Time",
        x = "Date",
        y = "Cases")+
-scale_y_continuous(labels = scales::comma_format())
+scale_y_continuous(labels = scales::comma_format())# this line from :https://thiyanga.netlify.app/post/plotaxis/
 
-#G- question
+#Question E
+# 
+ggplot(covid_2022, aes(x = day, y = cases)) +
+  geom_point() +
+  labs(title = "COVID-19 Cases by Day of the Month",
+       x = "Day",
+       y = "Cases") +
+  scale_y_continuous(labels = scales::comma_format()) # this line from :https://thiyanga.netlify.app/post/plotaxis/
+
+#G- question PCA
 columns_num <-covid_2022[, c(2, 3, 4, 5, 6, 10)]
 data_clean<- na.omit(columns_num)
 
